@@ -1,4 +1,4 @@
-name: deployment workflow
+name: deployment workflow rec
 
 on:
   push:
