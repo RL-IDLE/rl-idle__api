@@ -70,7 +70,9 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
 
           ssh -p ${{ vars.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.SOURCE_PATH }}"
-          scp -P ${{ vars.SSH_PORT }} docker/docker-compose.recette.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.SOURCE_PATH }}/docker-compose.yml
+          mkdir -p tmp/rl-idle-devops
+          git clone https://github.com/RL-IDLE/rl-idle-devops.git tmp/rl-idle-devops
+          scp -P ${{ vars.SSH_PORT }} tmp/rl-idle-devops/docker/docker-compose.recette.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.SOURCE_PATH }}/docker-compose.yml
           scp -P ${{ vars.SSH_PORT }} .env ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.SOURCE_PATH }}/.env
 
       - name: Deploy to production
