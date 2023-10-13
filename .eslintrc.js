@@ -5,7 +5,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin', "unused-imports"],
+  plugins: ['@typescript-eslint/eslint-plugin', 'unused-imports'],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
@@ -15,69 +15,83 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: ['dist', '.eslintrc.js'],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    "unused-imports/no-unused-imports": "error",
-        "@typescript-eslint/no-unused-vars": [
-      "warn",
+    'unused-imports/no-unused-imports': 'error',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
       {
-        argsIgnorePattern: "^_",
-        varsIgnorePattern: "^_",
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
       },
     ],
-    "sort-imports": [
-      "error",
+    'sort-imports': [
+      'error',
       {
         ignoreCase: true,
         ignoreDeclarationSort: true,
       },
     ],
-    "import/order": [
+    'import/order': [
       1,
       {
-        groups: ["external", "builtin", "internal", "sibling", "parent", "index"],
+        groups: [
+          'external',
+          'builtin',
+          'internal',
+          'sibling',
+          'parent',
+          'index',
+        ],
         pathGroups: [
           ...getDirectoriesToSort().map((singleDir) => ({
             pattern: `${singleDir}/**`,
-            group: "internal",
+            group: 'internal',
           })),
           {
-            pattern: "env",
-            group: "internal",
+            pattern: 'env',
+            group: 'internal',
           },
           {
-            pattern: "theme",
-            group: "internal",
+            pattern: 'theme',
+            group: 'internal',
           },
           {
-            pattern: "public/**",
-            group: "internal",
-            position: "after",
+            pattern: 'public/**',
+            group: 'internal',
+            position: 'after',
           },
         ],
-        pathGroupsExcludedImportTypes: ["internal"],
+        pathGroupsExcludedImportTypes: ['internal'],
         alphabetize: {
-          order: "asc",
+          order: 'asc',
           caseInsensitive: true,
         },
       },
     ],
-    "max-params": ["error", 4],
-    "@typescript-eslint/no-unnecessary-condition": "error",
+    'max-params': ['error', 4],
+    '@typescript-eslint/no-unnecessary-condition': 'error',
   },
 };
 
 function getDirectoriesToSort() {
-  const ignoredSortingDirectories = [".git", ".next", ".vscode", "node_modules"]
-  return getDirectories(process.cwd()).filter((f) => !ignoredSortingDirectories.includes(f))
+  const ignoredSortingDirectories = [
+    '.git',
+    '.next',
+    '.vscode',
+    'node_modules',
+  ];
+  return getDirectories(process.cwd()).filter(
+    (f) => !ignoredSortingDirectories.includes(f),
+  );
 }
 
 function getDirectories(path) {
   return fs.readdirSync(path).filter(function (file) {
-    return fs.statSync(path + "/" + file).isDirectory()
-  })
+    return fs.statSync(path + '/' + file).isDirectory();
+  });
 }
