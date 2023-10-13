@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { EventsModule } from './events/events.module';
+import { StatsModule } from './stats/stats.module';
 
 const isProduction = process.env.NODE_ENV === 'production';
 console.log('isProductionDB', isProduction);
@@ -19,7 +20,7 @@ const typeOrmConfig: TypeOrmModuleOptions = isProduction
       database: process.env.POSTGRES_DB,
       ssl: true,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: false,
       autoLoadEntities: true,
       // extra: {
       //   min: 2,
@@ -34,7 +35,7 @@ const typeOrmConfig: TypeOrmModuleOptions = isProduction
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: false,
       autoLoadEntities: true,
       // extra: {
       //   min: 2,
@@ -47,6 +48,7 @@ const typeOrmConfig: TypeOrmModuleOptions = isProduction
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(typeOrmConfig),
     EventsModule,
+    StatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

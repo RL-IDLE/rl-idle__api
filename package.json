@@ -22,7 +22,16 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prettier": "prettier --check \"**/*.{js,jsx,ts,tsx}\"",
-    "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx}\""
+    "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
+    "migrate:up": "npm run typeorm:run-migrations",
+    "migrate:down": "npm run typeorm:revert-migration",
+    "make:migration": "npm run typeorm:generate-migration",
+    "create:migration": "npm run typeorm:create-migration",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "typeorm:run-migrations": "npm run typeorm migration:run -- -d ./src/database/database.configuration.ts",
+    "typeorm:generate-migration": "npm run typeorm -- -d ./src/database/database.configuration.ts migration:generate ./src/database/migrations/$npm_config_name",
+    "typeorm:create-migration": "npm run typeorm -- migration:create ./src/database/migrations/$npm_config_name",
+    "typeorm:revert-migration": "npm run typeorm -- -d ./src/database/database.configuration.ts migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^10.2.7",
