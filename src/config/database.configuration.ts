@@ -1,10 +1,12 @@
+import { env } from "../env";
+
 export default () => ({
-  db_kind: process.env.DATABASE_KIND || 'postgres',
-  db_host: process.env.DATABASE_HOST || 'localhost',
-  db_port: process.env.DATABASE_PORT
-    ? parseInt(process.env.DATABASE_PORT, 10)
+  db_kind: 'postgres',
+  db_host: env.POSTGRES_HOST || 'localhost',
+  db_port: env.POSTGRES_PORT
+    ? parseInt(env.POSTGRES_PORT, 10)
     : 5432,
-  db_user: process.env.DATABASE_USER || 'root',
-  db_pass: process.env.DATABASE_PASS || 'root',
-  db_name: process.env.DATABASE_NAME || 'basic',
+  db_user: env.POSTGRES_USER || 'root',
+  db_pass: env.POSTGRES_PASSWORD || 'root',
+  db_name: env.POSTGRES_DB || 'basic',
 });

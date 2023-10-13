@@ -21,11 +21,8 @@ export default [
       database: configService.getOrThrow<string>('db_name'),
       entities: [],
       autoLoadEntities: true,
+      synchronize: process.env.NODE_ENV !== 'production',
     }),
-  }),
-  ThrottlerModule.forRoot({
-    ttl: 60,
-    limit: 10,
   }),
   ScheduleModule.forRoot(),
 ];
@@ -34,4 +31,3 @@ const configService = new ConfigService();
 export const BACKHEALTH_API_KEY =
   configService.get<string>('BACKHEALTH_API_KEY');
 export const ENVIRONMENT = configService.getOrThrow<string>('ENV');
-export const PROJECT_NAME = configService.getOrThrow<string>('PROJECT_NAME');

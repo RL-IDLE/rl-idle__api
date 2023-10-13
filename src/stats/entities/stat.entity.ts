@@ -1,6 +1,7 @@
-import { Timestamp } from "src/Generic/timestamp.entity";
-import { Column, PrimaryGeneratedColumn } from "typeorm";
+import { Timestamp } from "../../Generic/timestamp.entity";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity("stat")
 export class StatEntity extends Timestamp {
   @PrimaryGeneratedColumn()
   id: number
@@ -10,4 +11,12 @@ export class StatEntity extends Timestamp {
     unique: false
   })
   money: string
+
+  @Column({
+    nullable: true,
+    unique: false
+  })
+  clicks: number
+
+  
 }
