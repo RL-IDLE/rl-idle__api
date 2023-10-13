@@ -7,13 +7,17 @@ config();
 export const env = createEnv({
   server: {
     ENV: z.enum(['development', 'production']),
-    DATABASE_URL: z.string(),
+    POSTGRES_HOST: z.string(),
+    POSTGRES_PORT: z.string(),
+    POSTGRES_USER: z.string(),
+    POSTGRES_PASSWORD: z.string(),
+    POSTGRES_DB: z.string(),
     REDIS_HOST: z.string(),
     REDIS_USERNAME: z.string(),
     REDIS_PASSWORD: z.string(),
     REDIS_PORT: z.string(),
     REDIS_URL: z.string(),
-    REDIS_USE_TLS: z.boolean(),
+    REDIS_USE_TLS: z.coerce.boolean(),
   },
 
   /**
