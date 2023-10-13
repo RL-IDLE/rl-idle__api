@@ -10,6 +10,10 @@ COPY package.json .
 COPY package-lock.json .
 RUN npm ci
 
+COPY scrips/package.json ./scrips/
+COPY scrips/package-lock.json ./scrips/
+RUN cd scrips && npm ci
+
 COPY . .
 
 RUN npm run build
