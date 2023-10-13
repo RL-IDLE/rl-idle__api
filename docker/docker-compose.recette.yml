@@ -10,7 +10,7 @@ services:
       options:
         max-size: '50m'
     ports:
-      - '10061:3000'
+      - '10057:3000'
 
   db:
     image: postgres:latest
@@ -28,7 +28,7 @@ services:
       options:
         max-size: '50m'
     ports:
-      - '10063:5432'
+      - '10059:5432'
 
   redis:
     restart: unless-stopped
@@ -42,7 +42,7 @@ services:
     volumes:
       - redis-data:/data
     ports:
-      - '10064:6379'
+      - '10060:6379'
 
 volumes:
   postgres-data:
