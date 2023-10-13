@@ -12,7 +12,7 @@ RUN npm ci
 
 COPY scripts/package.json ./scripts/
 COPY scripts/package-lock.json ./scripts/
-RUN cd scrips && npm ci
+RUN cd scripts && npm ci
 
 COPY . .
 
