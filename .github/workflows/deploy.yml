@@ -3,8 +3,8 @@ name: deployment workflow
 on:
   push:
     branches:
-      # Change this to enable the workflow
-      - never
+      - rec
+      - main
 
   workflow_dispatch:
 
@@ -26,6 +26,7 @@ jobs:
           extra_args: --debug --only-verified
 
   run:
+    environment: main
     runs-on: ubuntu-latest
 
     steps:
@@ -36,6 +37,13 @@ jobs:
         run: |
           touch .env
           echo ENV=production >> .env
+          echo DATABASE_URL="postgresql://${{ vars.DATABASE_USER }}:${{ secrets.DATABASE_PASS }}@db:5432/${{ vars.DATABASE_NAME }}?schema=public" >> .env
+          echo REDIS_HOST=localhost >> .env
+          echo REDIS_USERNAME= >> .env
+          echo REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} >> .env
+          echo REDIS_PORT=6379 >> .env
+          echo REDIS_URL=redis://redis:6379 >> .env
+          echo REDIS_USE_TLS=false >> .env
 
       - name: Login to docker
         uses: docker/login-action@v3
@@ -46,13 +54,9 @@ jobs:
 
       - name: Build the docker image
         run: |
-          # Main application
-          docker build -t rg.fr-par.scw.cloud/namespace-main/main-application-image:latest .
-          docker push rg.fr-par.scw.cloud/namespace-main/main-application-image:latest
-
-          # Cron
-          docker build -t rg.fr-par.scw.cloud/namespace-main/cron-image:latest -f cron/Dockerfile .
-          docker push rg.fr-par.scw.cloud/namespace-main/cron-image:latest
+          # Api
+          docker build -t rg.fr-par.scw.cloud/rl-idle-worker/api:latest .
+          docker push rg.fr-par.scw.cloud/namespace-main/api:latest
 
       - name: Push docker compose
         run: |
@@ -63,9 +67,9 @@ jobs:
           ssh-keyscan -t rsa ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-          ssh -p ${{ vars.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ vars.SOURCE_PATH }}"
-          scp -P ${{ vars.SSH_PORT }} docker/docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ vars.SOURCE_PATH }}/docker-compose.yml
-          scp -P ${{ vars.SSH_PORT }} .env ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ vars.SOURCE_PATH }}/.env
+          ssh -p ${{ vars.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.SOURCE_PATH }}"
+          scp -P ${{ vars.SSH_PORT }} docker/docker-compose.production.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.SOURCE_PATH }}/docker-compose.yml
+          scp -P ${{ vars.SSH_PORT }} .env ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.SOURCE_PATH }}/.env
 
       - name: Deploy to production
         uses: appleboy/ssh-action@master
@@ -76,19 +80,10 @@ jobs:
           port: ${{ vars.SSH_PORT }}
           envs: REGISTRY_USERNAME, REGISTRY_KEY
           script: |
-            cd ${{ vars.SOURCE_PATH_ }}
+            cd ${{ secrets.SOURCE_PATH }}
             set -a
             source .env
-            docker login rg.fr-par.scw.cloud/namespace-main -u '${{ vars.REGISTRY_USERNAME }}' -p '${{ secrets.REGISTRY_KEY }}'
+            docker login rg.fr-par.scw.cloud/namespace-main -u '${{ secrets.REGISTRY_USERNAME }}' -p '${{ secrets.REGISTRY_KEY }}'
             docker compose pull
             docker system prune -f
             docker compose up -d
-
-      - name: Create Sentry release
-        uses: getsentry/action-release@v1.4.1
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        with:
-          environment: production
