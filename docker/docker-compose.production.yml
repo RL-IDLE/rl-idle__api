@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   api:
-    image: DOCKER_DEPLOY_APP_IMAGE
+    image: rg.fr-par.scw.cloud/rl-idle/api:latest
     container_name: rl-idle_api
     restart: unless-stopped
     logging:

@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - rec
-      - main
 
   workflow_dispatch:
 
@@ -50,13 +49,13 @@ jobs:
         with:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_KEY }}
-          registry: rg.fr-par.scw.cloud/namespace-main
+          registry: rg.fr-par.scw.cloud/rl-idle
 
       - name: Build the docker image
         run: |
           # Api
-          docker build -t rg.fr-par.scw.cloud/rl-idle-worker/api:latest .
-          docker push rg.fr-par.scw.cloud/namespace-main/api:latest
+          docker build -t rg.fr-par.scw.cloud/rl-idle/api:latest .
+          docker push rg.fr-par.scw.cloud/rl-idle/api:latest
 
       - name: Push docker compose
         run: |
@@ -83,7 +82,7 @@ jobs:
             cd ${{ secrets.SOURCE_PATH }}
             set -a
             source .env
-            docker login rg.fr-par.scw.cloud/namespace-main -u '${{ secrets.REGISTRY_USERNAME }}' -p '${{ secrets.REGISTRY_KEY }}'
+            docker login rg.fr-par.scw.cloud/rl-idle -u '${{ secrets.REGISTRY_USERNAME }}' -p '${{ secrets.REGISTRY_KEY }}'
             docker compose pull
             docker system prune -f
             docker compose up -d
