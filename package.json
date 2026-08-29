@@ -26,10 +26,10 @@
     "depcheck": "cd scripts && npm i && npm run depcheck"
   },
   "dependencies": {
-    "@nestjs/cli": "^10.1.18",
-    "@nestjs/common": "^10.2.7",
-    "@nestjs/core": "^10.2.7",
-    "@nestjs/platform-express": "^10.2.7",
+    "@nestjs/cli": "^12.0.0",
+    "@nestjs/common": "^12.0.0",
+    "@nestjs/core": "^12.0.0",
+    "@nestjs/platform-express": "^12.0.0",
     "@t3-oss/env-core": "^0.13.0",
     "dotenv": "^16.3.1",
     "reflect-metadata": "^0.2.0",
@@ -43,8 +43,8 @@
     "@semantic-release/release-notes-generator": "^12.0.0"
   },
   "devDependencies": {
-    "@nestjs/schematics": "^10.0.2",
-    "@nestjs/testing": "^10.2.7",
+    "@nestjs/schematics": "^12.0.0",
+    "@nestjs/testing": "^12.0.0",
     "@types/express": "^5.0.0",
     "@types/jest": "30.0.0",
     "@types/node": "24.9.1",
